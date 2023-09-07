@@ -132,3 +132,51 @@ pages:
       - $CARGO_HOME/bin
 ```
 在您提交并推送这个新文件后，GitLab CI 将自动运行并且您的书将可用！
+
+# 使用Github Action 的workflow 构建Github Pages
+
+1. 生成Access Token
+访问[token](https://github.com/settings/tokens) 新建Access Token, 并复制下来，因为保存之后就看不到了。
+注意: 权限至少选择 `public_repo`, 不行加上 `workflow`
+
+2. 到需要生成Github Pages 的页面上生成 `Actions secrets and variables`
+- 路径: 仓库 -> settings -> Actions secrets and variables -> Action, 点击`New repository secret` 
+- 复制1 中的token 到 `Secret` 中, `Name` 取名如 `ACTIONS_DEPLOY_KEY` 记住，下一步要用
+
+3. 到Github marketplace 搜索写好的yml 比如下面:
+注意替换Token
+```yml
+name:  Build and Deploy mdbook
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          # mdbook-version: '0.4.10'
+          mdbook-version: 'latest'
+
+      - run: mdbook build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./book
+```
+
+4. 提交到github 之后访问 `https://<username>.github.io/<repository>` 即可
