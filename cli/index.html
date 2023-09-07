@@ -1,0 +1,338 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>集成 - my-test-for-mdbook</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="The example book covers examples.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../index.html">前言说明</a></li><li class="chapter-item expanded affix "><a href="../index2.html">说明2</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">目录</li><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> 指南</a></li><li class="chapter-item expanded "><a href="../cmd/index.html"><strong aria-hidden="true">2.</strong> 命令</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../cmd/init.html"><strong aria-hidden="true">2.1.</strong> init</a></li><li class="chapter-item expanded "><a href="../cmd/watch.html"><strong aria-hidden="true">2.2.</strong> watch</a></li></ol></li><li class="chapter-item expanded "><a href="../format/index.html"><strong aria-hidden="true">3.</strong> 结构</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../format/summary.html"><strong aria-hidden="true">3.1.</strong> summary</a></li><li><ol class="section"><li class="chapter-item expanded "><div><strong aria-hidden="true">3.1.1.</strong> 草稿章节</div></li></ol></li><li class="chapter-item expanded "><a href="../format/config.html"><strong aria-hidden="true">3.2.</strong> 配置</a></li><li class="chapter-item expanded "><a href="../format/theme.html"><strong aria-hidden="true">3.3.</strong> 主题</a></li></ol></li><li class="chapter-item expanded "><a href="../cli/index.html" class="active"><strong aria-hidden="true">4.</strong> 集成</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><a href="../说明/index3.html">后缀说明</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">my-test-for-mdbook</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="集成"><a class="header" href="#集成">集成</a></h1>
+<p>虽然以下示例使用 Travis CI，但它们的原则也应该直接转移到其他持续集成提供者。</p>
+<h1 id="确保您的图书-build-和-test-通过"><a class="header" href="#确保您的图书-build-和-test-通过">确保您的图书 build 和 test 通过</a></h1>
+<p>这是一个示例 Travis CI .travis.yml 配置，可确保 mdbook build 和 mdbook test 成功运行。 快速 CI 运转时间的关键是缓存 mdbook 安装，这样您就不会在每次 CI 运行时编译 mdbook。</p>
+<pre><code class="language-sh">language: rust
+sudo: false
+
+cache:
+  - cargo
+
+rust:
+  - stable
+
+before_script:
+  - (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
+  - (test -x $HOME/.cargo/bin/mdbook || cargo install --vers &quot;^0.3&quot; mdbook)
+  - cargo install-update -a
+
+script:
+  - mdbook build &amp;&amp; mdbook test # In case of custom book path: mdbook build path/to/mybook &amp;&amp; mdbook test path/to/mybook
+</code></pre>
+<h1 id="将您的书部署到-github-pages"><a class="header" href="#将您的书部署到-github-pages">将您的书部署到 GitHub Pages</a></h1>
+<p>遵循这些说明将导致在您仓库的master分支上成功运行 CI 后，您的书将被发布到 GitHub pages。</p>
+<p>首先，使用“public_repo”权限（或“repo”用于私有仓库）创建一个新的 GitHub “Personal Access Token”(个人访问令牌)。 转到仓库的 Travis CI 设置页面并添加名为 GITHUB_TOKEN 的环境变量，该变量标记为安全且未显示在日志中。</p>
+<p>在您仓库的设置页面中，导航到 Options 并将 GitHub Pages 上的 Source 更改为 gh-pages。</p>
+<p>然后，将此代码段附加到您的 .travis.yml 并更新 book 目录的路径：</p>
+<pre><code class="language-sh">deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN
+  local-dir: book # In case of custom book path: path/to/mybook/book
+  keep-history: false
+  on:
+    branch: main
+</code></pre>
+<p>仅此而已!</p>
+<p>注意: Travis 有一个新的 dplv2 配置，目前处于测试阶段。 要使用这种新格式，请将 .travis.yml 文件更新为：</p>
+<pre><code class="language-sh">language: rust
+os: linux
+dist: xenial
+
+cache:
+  - cargo
+
+rust:
+  - stable
+
+before_script:
+  - (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
+  - (test -x $HOME/.cargo/bin/mdbook || cargo install --vers &quot;^0.3&quot; mdbook)
+  - cargo install-update -a
+
+script:
+  - mdbook build &amp;&amp; mdbook test # In case of custom book path: mdbook build path/to/mybook &amp;&amp; mdbook test path/to/mybook
+  
+deploy:
+  provider: pages
+  strategy: git
+  edge: true
+  cleanup: false
+  github-token: $GITHUB_TOKEN
+  local-dir: book # In case of custom book path: path/to/mybook/book
+  keep-history: false
+  on:
+    branch: main
+  target_branch: gh-pages
+
+</code></pre>
+<h2 id="手动部署到-github-pages"><a class="header" href="#手动部署到-github-pages">手动部署到 GitHub Pages</a></h2>
+<p>如果您的 CI 不支持 GitHub Pages，或者您正在使用 Github Pages 等集成部署到其他地方：</p>
+<p>注意: 您可能想要使用不同的 tmp 目录:</p>
+<pre><code class="language-sh">$&gt; git worktree add /tmp/book gh-pages
+$&gt; mdbook build
+$&gt; rm -rf /tmp/book/* # this won't delete the .git directory
+$&gt; cp -rp book/* /tmp/book/
+$&gt; cd /tmp/book
+$&gt; git add -A
+$&gt; git commit 'new book message'
+$&gt; git push origin gh-pages
+$&gt; cd -
+</code></pre>
+<p>或者将其放入 Makefile 规则中：</p>
+<pre><code class="language-sh">.PHONY: deploy
+deploy: book
+ @echo &quot;====&gt; deploying to github&quot;
+ git worktree add /tmp/book gh-pages
+ rm -rf /tmp/book/*
+ cp -rp book/* /tmp/book/
+ cd /tmp/book &amp;&amp; \
+  git add -A &amp;&amp; \
+  git commit -m &quot;deployed on $(shell date) by ${USER}&quot; &amp;&amp; \
+  git push origin gh-pages
+</code></pre>
+<h1 id="部署你的书到-gitlab-pages"><a class="header" href="#部署你的书到-gitlab-pages">部署你的书到 GitLab Pages</a></h1>
+<p>在仓库的项目根目录中，创建一个名为 .gitlab-ci.yml 的文件，其中包含以下内容：</p>
+<pre><code class="language-sh">stages:
+    - deploy
+
+pages:
+  stage: deploy
+  image: rust
+  variables:
+    CARGO_HOME: $CI_PROJECT_DIR/cargo
+  before_script:
+    - export PATH=&quot;$PATH:$CARGO_HOME/bin&quot;
+    - mdbook --version || cargo install mdbook
+  script:
+    - mdbook build -d public
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == &quot;master&quot;'
+  artifacts:
+    paths:
+      - public
+  cache:
+    paths:
+      - $CARGO_HOME/bin
+</code></pre>
+<p>在您提交并推送这个新文件后，GitLab CI 将自动运行并且您的书将可用！</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../format/theme.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../说明/index3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../format/theme.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../说明/index3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
